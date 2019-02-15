@@ -3,9 +3,6 @@
 const http = require('http');
 const functions = require('firebase-functions');
 
-const host = 'api.worldweatheronline.com';
-const wwoApiKey = '3772aabe522543cbbfa150114191402';
-
 exports.dialogflowFirebaseFulfillment = functions.https.onRequest((req, res) => {
   let city = req.body.queryResult.parameters.city; // city is a required param
   if (req.body.queryResult.parameters.country) {
@@ -26,6 +23,10 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((req, res) => 
 });
 
 function callWeatherApi (city, date) {
+
+  const host = 'api.worldweatheronline.com';
+  const wwoApiKey = '3772aabe522543cbbfa150114191402';
+
   return new Promise((resolve, reject) => {
     let day_date = date.substring(0,10);
     let path = '/premium/v1/weather.ashx?format=json&num_of_days=1' +
