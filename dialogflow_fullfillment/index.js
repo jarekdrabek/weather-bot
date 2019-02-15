@@ -7,16 +7,16 @@ const host = 'api.worldweatheronline.com';
 const wwoApiKey = '3772aabe522543cbbfa150114191402';
 
 exports.dialogflowFirebaseFulfillment = functions.https.onRequest((req, res) => {
-  let city = req.body.queryResult.parameters['city']; // city is a required param
-  if (req.body.queryResult.parameters['country']) {
-    city += ','+req.body.queryResult.parameters['country'];
+  let city = req.body.queryResult.parameters.city; // city is a required param
+  if (req.body.queryResult.parameters.country) {
+    city += ','+req.body.queryResult.parameters.country;
   }
   let date = '';
-  if (req.body.queryResult.parameters['date']) {
-    date = req.body.queryResult.parameters['date'];
+  if (req.body.queryResult.parameters.date) {
+    date = req.body.queryResult.parameters.date;
   }
   console.log("Date:", date, " City:", city);
-  
+
   callWeatherApi(city, date).then((output) => {
     res.json({ 'fulfillmentText': output });
   }).catch((error) => {
@@ -38,11 +38,11 @@ function callWeatherApi (city, date) {
       res.on('end', () => {
         console.log('Response: ' + body);
         let response = JSON.parse(body);
-        let location = response['data']['request'][0]['query'];
-        let the_day_at_noon = response['data']['weather'][0]['hourly'][4];
-        let temperature = the_day_at_noon['tempC'];
-        let cloudiness = the_day_at_noon['weatherDesc'][0]['value'];
-        
+        let location = response.data.request[0].query;
+        let the_day_at_noon = response.data.weather[0].hourly[4];
+        let temperature = the_day_at_noon.tempC;
+        let cloudiness = the_day_at_noon.weatherDesc[0].value;
+
         let output = `${cloudiness} with the temperature of ${temperature}°C
         in ${location} on ${day_date}`;
 
@@ -51,10 +51,9 @@ function callWeatherApi (city, date) {
         resolve(output);
       });
       res.on('error', (error) => {
-        console.log(`Error calling the weather API: ${error}`)
+        console.log(`Error calling the weather API: ${error}`);
         reject();
       });
     });
   });
 }
-
