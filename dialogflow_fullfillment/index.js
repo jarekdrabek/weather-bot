@@ -7,11 +7,17 @@ const functions = require('firebase-functions');
 exports.dialogflowFirebaseFulfillment = functions.https.onRequest((req, res) => {
   	let date = req.body.queryResult.parameters.date;
     let city = req.body.queryResult.parameters.city;
-    callGetCoordinates(city).then(output =>{
-        callWeatherApi(output.cityName, output.coordinates, date).then(output =>
-            res.json({"fulfillmentText":output}));
-    });
+    getWeatherForecast(city, date).then(output => res.json({"fulfillmentText":output}));
 });
+
+
+function getWeatherForecast(city, date){
+  return new Promise((resolve, reject) => {
+    callGetCoordinates(city).then(output =>{
+        callWeatherApi(output.cityName, output.coordinates, date).then(output => resolve(output));
+    });
+  });
+}
 
 function callWeatherApi (cityName, coordinates, date) {
   const host = 'api.worldweatheronline.com';
