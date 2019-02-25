@@ -4,22 +4,9 @@ const http = require('http');
 const functions = require('firebase-functions');
 
 exports.dialogflowFirebaseFulfillment = functions.https.onRequest((req, res) => {
-  let city = req.body.queryResult.parameters.city; // city is a required param
-  if (req.body.queryResult.parameters.country) {
-    city += ','+req.body.queryResult.parameters.country;
-  }
-  let date = '';
-  if (req.body.queryResult.parameters.date) {
-    date = req.body.queryResult.parameters.date;
-  }
-  console.log("Date:", date, " City:", city);
-
-  callWeatherApi(city, date).then((output) => {
-    res.json({ 'fulfillmentText': output });
-  }).catch((error) => {
-    res.json({ 'fulfillmentText': `I was not able to check the weather online, try again!` });
-    console.log(error);
-  });
+  	let date = req.body.queryResult.parameters.date;
+    let city = req.body.queryResult.parameters.city;
+    callWeatherApi(city, date).then(output => res.json({"fulfillmentText":output}));
 });
 
 function callWeatherApi (city, date) {
@@ -42,12 +29,11 @@ function callWeatherApi (city, date) {
         let location = response.data.request[0].query;
         let the_day_at_noon = response.data.weather[0].hourly[4];
         let temperature = the_day_at_noon.tempC;
-        let cloudiness = the_day_at_noon.weatherDesc[0].value;
+        let weather_description = the_day_at_noon.weatherDesc[0].value;
 
-        let output = `${cloudiness} with the temperature of ${temperature}°C
+        let output = `${weather_description} with the temperature of ${temperature}°C
         in ${location} on ${day_date}`;
 
-        // Resolve the promise with the output text
         console.log(output);
         resolve(output);
       });
