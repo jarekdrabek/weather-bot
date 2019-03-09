@@ -4,12 +4,12 @@ const http = require('http');
 const https = require('https');
 const functions = require('firebase-functions');
 
-exports.dialogflowFirebaseFulfillment = functions.https.onRequest((req, res) => {
-  	let date = req.body.queryResult.parameters.date;
-    let city = req.body.queryResult.parameters.city;
-    getWeatherForecast(city, date).then(output => res.json({"fulfillmentText":output}));
+exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, res) => {
+  	let date = request.body.queryResult.parameters.date;
+    let city = request.body.queryResult.parameters.city;
+        getWeatherForecast(city, date).then(output => res.json({"fulfillmentText":output})
+    );
 });
-
 
 function getWeatherForecast(city, date){
   return new Promise((resolve, reject) => {
@@ -19,6 +19,7 @@ function getWeatherForecast(city, date){
   });
 }
 
+// api.worldweatheronline.com/premium/v1/weather.ashx?format=json&num_of_days=1&q=Paris&key=3772aabe522543cbbfa150114191402&date=2019-02-19
 function callWeatherApi (cityName, coordinates, date) {
   const host = 'api.worldweatheronline.com';
   const wwoApiKey = '3772aabe522543cbbfa150114191402';
