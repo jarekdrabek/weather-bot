@@ -56,7 +56,7 @@ function callWeatherApi (cityName, coordinates, date) {
 }
 
 function callGetCoordinates(cityName){
-
+// https://developers.google.com/maps/documentation/geocoding/intro
   let google_host = 'https://maps.googleapis.com';
   let googleApiKey = 'AIzaSyBj2ZABDNF1VhG9zCI__lF4DttQ_I5Zkuw';
   let path = "/maps/api/geocode/json?address="+encodeURIComponent(cityName)+"&key="+googleApiKey;
