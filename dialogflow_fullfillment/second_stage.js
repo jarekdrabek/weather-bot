@@ -24,7 +24,7 @@ const https = require('https');
 function callWeatherApi(cityName, coordinates, date) {
 // api.worldweatheronline.com/premium/v1/weather.ashx?format=json&num_of_days=1&q=Paris&key=3772aabe522543cbbfa150114191402&date=2019-02-19
     const host = 'api.worldweatheronline.com';
-    const wwoApiKey = '3772aabe522543cbbfa150114191402';
+    const wwoApiKey = '6f69602ddf4446bb9fa202139191903';
 
     return new Promise((resolve, reject) => {
         let day_date = date.substring(0, 10);
